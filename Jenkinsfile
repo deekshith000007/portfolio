@@ -8,12 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-<<<<<<< HEAD
-                // Clone your GitHub repository
-                git 'https://github.com/deekshith000007/portfolio.git' // Public repository
-=======
                 git branch: 'deexi', url: 'https://github.com/deekshith000007/portfolio.git'
->>>>>>> d06d74315b3d71a9f40749b525372529f1c8c3d7
             }
         }
         
