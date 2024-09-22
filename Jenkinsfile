@@ -1,35 +1,44 @@
 pipeline {
     agent any
-
+    
+    tools {
+        maven 'Maven'
+    }
+    
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                // Clone your GitHub repository
-                git 'https://github.com/deekshith000007/portfolio.git' // Public repository
+                git 'https://github.com/yourusername/portfolio.git'
             }
         }
+        
         stage('Build') {
             steps {
-                // Build the project using Maven
                 sh 'mvn clean package'
             }
         }
-        stage('Build Docker Image') {
+        
+        stage('Docker Build') {
             steps {
-                script {
-                    def imageName = "portfolio_image" // Customize image name
-                    // Build the Docker image
-                    sh "docker build -t ${imageName} ."
-                }
+                sh 'docker build -t portfolio:${BUILD_NUMBER} .'
             }
         }
-        stage('Run Docker Container') {
+        
+        stage('Docker Run') {
             steps {
-                script {
-                    // Run the Docker container
-                    sh "docker run -d -p 8081:8080 portfolio_image:latest" // Map your ports
-                }
+                sh 'docker stop portfolio || true'
+                sh 'docker rm portfolio || true'
+                sh 'docker run -d -p 8080:8080 --name portfolio portfolio:${BUILD_NUMBER}'
             }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline succeeded! Your portfolio is now live.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
