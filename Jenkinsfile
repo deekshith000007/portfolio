@@ -28,7 +28,7 @@ pipeline {
             steps {
                 sh 'docker stop portfolio || true'
                 sh 'docker rm portfolio || true'
-                sh 'docker run -d -p 8080:8080 --name portfolio portfolio:${BUILD_NUMBER}'
+                sh 'docker run -d -p 8081:8080 --name portfolio portfolio:${BUILD_NUMBER}'
             }
         }
     }
